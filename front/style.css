@@ -45,6 +45,16 @@ body {
     color: #fff;
 }
 
+#form>select {
+    background: #333;
+    border: none;
+    padding: 0 1rem;
+    margin: 0.25rem;
+    border-radius: 3px;
+    outline: none;
+    color: #fff;
+}
+
 #messages {
     padding: 10px;
     list-style-type: none;

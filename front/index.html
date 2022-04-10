@@ -14,7 +14,9 @@
   <ul id="messages"></ul>
   <p id="typing"></p>
   <form id="form" action="">
-    <input id="input" autocomplete="off" /><button>Send</button>
+    <input id="input" autocomplete="off" />
+    <select id="select" name="select"></select>
+    <button>Send</button>
   </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -25,6 +27,7 @@
     var messages = document.getElementById('messages');
     var form = document.getElementById('form');
     var input = document.getElementById('input');
+    var online = document.getElementById('select')
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -82,6 +85,12 @@
         item.appendChild(status)
         item.appendChild(name)
         members.appendChild(item)
+
+        var item = document.createElement('option');
+        item.setAttribute('id', `all`)
+        item.setAttribute('value', `Todos`)
+        item.textContent = `Todos`
+        online.appendChild(item)
       }
 
       msg.map(member => {
@@ -98,6 +107,21 @@
           members.appendChild(item)
         } else {
           member.online ? document.getElementById(`${member.nick}`).style.backgroundColor = 'green' : document.getElementById(`${member.nick}`).style.backgroundColor = 'red';
+        }
+
+        if (nick !== member.nick) {
+          if (!document.getElementById(`${member.nick}__status`)) {
+            var item = document.createElement('option');
+            item.setAttribute('id', `${member.nick}__status`)
+            item.setAttribute('value', `${member.nick}`)
+            item.disabled = !member.online
+            item.textContent = `${member.nick}`
+            online.appendChild(item)
+          } else {
+            const bool = member.online ? true : false
+            var status = document.getElementById(`${member.nick}__status`)
+            status.disabled = !bool;
+          }
         }
       })
     })
