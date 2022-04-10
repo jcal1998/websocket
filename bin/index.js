@@ -57,7 +57,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('disparouoff', socket.handshake.query.loggeduser)
     members.forEach(m => {
       if (m.nick === socket.handshake.query.loggeduser) m.online = false
     })
