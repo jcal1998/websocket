@@ -1,0 +1,115 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    padding-bottom: 3rem;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#form {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 0.25rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: 3.5rem;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+#input {
+    border: none;
+    padding: 0 1rem;
+    flex-grow: 1;
+    border-radius: 2rem;
+    margin: 0.25rem;
+}
+
+#input:focus {
+    outline: none;
+}
+
+#form>button {
+    background: #333;
+    border: none;
+    padding: 0 1rem;
+    margin: 0.25rem;
+    border-radius: 3px;
+    outline: none;
+    color: #fff;
+}
+
+#messages {
+    padding: 10px;
+    list-style-type: none;
+    margin: 70px 0 35px;
+}
+
+#messages>li {
+    width: fit-content;
+    max-width: 400px;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.my__message {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin: 5px 5px 5px auto;
+    background-color: #ccffcc;
+}
+
+.others__message {
+    margin: 5px auto 5px 5px;
+    background-color: #e6f7ff;
+}
+
+#typing {
+    padding-left: 20px;
+    align-items: center;
+    position: fixed;
+    bottom: 4rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+#group {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #540a43;
+    padding: 0 10px;
+    font-family: Apple Chancery, cursive;
+    background-color: #a2e3fa;
+    min-height: 60px;
+    font-size: 24px;
+}
+
+#members {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
+
+#members>li {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.statuscircle {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+}
