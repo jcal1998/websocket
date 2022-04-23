@@ -83,7 +83,11 @@ body {
 }
 
 .private{
-    background-color: orange;
+    background-color: #ffa74f;
+}
+
+.warning {
+    color: #ab1a1a;
 }
 
 #typing {
@@ -127,4 +131,24 @@ body {
     border-radius: 50%;
     height: 10px;
     width: 10px;
+}
+
+.contentDiv{
+    width: 100%;
+}
+
+.dataDiv{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.time {
+    display: flex;
+    align-items: flex-end;
+}
+
+.nick, .time{
+    font-size: 18px;
+    font-weight: bold;
 }

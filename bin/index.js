@@ -4,7 +4,6 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server, Socket } = require("socket.io");
-const { randomUUID } = require('crypto');
 const io = new Server(server);
 
 const members = []
@@ -30,14 +29,17 @@ io.on('connection', (socket) => {
   if (!members.some(m => m.nick === socket.handshake.query.loggeduser)) {
     const member = {
       nick: socket.handshake.query.loggeduser,
-      online: true,
-      idChat: socket.handshake.query.idChat,
+      status: 'green',
+      idChat: socket.id
     }
     members.push(member);
-    console.log('aqui os members', members)
-    io.emit('private', members);
   } else {
-    members.forEach(member => { if (member.nick === socket.handshake.query.loggeduser) member.online = true; })
+    members.forEach(member => {
+      if (member.nick === socket.handshake.query.loggeduser) {
+        member.idChat = socket.id
+        member.status = 'green';
+      }
+    })
   }
 
   io.emit('members', members)
@@ -47,10 +49,10 @@ io.on('connection', (socket) => {
       delete msg.destiny;
       io.emit('chat', msg);
     } else {
-      const channel = members.filter(member => member.nick === msg.destiny)[0].idChat
-      console.log(channel)
+      const idChat = members.filter(member => member.nick === msg.destiny)[0].idChat
       delete msg.destiny;
-      io.emit(channel, msg)
+      msg.idChat = idChat
+      io.emit('private', msg);
     }
   });
 
@@ -58,7 +60,7 @@ io.on('connection', (socket) => {
     io.emit('typing', msg);
     members.forEach(member => {
       if (member.nick === socket.handshake.query.loggeduser) {
-        member.online = true
+        member.status = 'green'
       }
     })
     io.emit('members', members)
@@ -66,10 +68,20 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     members.forEach(m => {
-      if (m.nick === socket.handshake.query.loggeduser) m.online = false
+      if (m.nick === socket.handshake.query.loggeduser) m.status = 'red'
     })
     io.emit('members', members)
   });
+
+  socket.on('away', (msg) => {
+
+    members.forEach(member => {
+      if (member.nick === socket.handshake.query.loggeduser) {
+        member.status = msg.status
+      }
+    })
+    io.emit('members', members)
+  })
 });
 
 server.listen(3000, () => {
