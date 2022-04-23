@@ -143,13 +143,16 @@ socket.on('members', (msg) => {
                 let item = document.createElement('option');
                 item.setAttribute('id', `${member.nick}__status`)
                 item.setAttribute('value', `${member.nick}`)
-                item.disabled = member.online != 'green'
+                item.disabled = member.status != 'green'
                 item.textContent = `${member.nick}`
                 online.appendChild(item)
                 //Option voltar ao default TODO
             } else {
-                let status = document.getElementById(`${member.nick}__status`)
-                status.disabled = member.online != 'green';
+                let item = document.getElementById(`${member.nick}__status`)
+                item.disabled = member.status != 'green';
+                if (member.nick === select.value && item.disabled) {
+                    online.value = 'Todos'
+                }
             }
         }
     })
