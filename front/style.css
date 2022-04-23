@@ -37,6 +37,7 @@ body {
 
 #form>button {
     background: #333;
+    cursor: pointer;
     border: none;
     padding: 0 1rem;
     margin: 0.25rem;
@@ -46,6 +47,7 @@ body {
 }
 
 #form>select {
+    cursor: pointer;
     background: #333;
     border: none;
     padding: 0 1rem;
@@ -82,7 +84,7 @@ body {
     background-color: #e6f7ff;
 }
 
-.private{
+.private {
     background-color: #ffa74f;
 }
 
@@ -90,8 +92,9 @@ body {
     color: #ab1a1a;
 }
 
-#typing {
-    padding-left: 20px;
+#bottomDiv {
+    justify-content: space-between;
+    padding: 0 20px;
     align-items: center;
     position: fixed;
     bottom: 4rem;
@@ -100,6 +103,11 @@ body {
     display: flex;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
+}
+
+#selectedImage{
+    color: #ab1a1a;
+    font-size: 18px;
 }
 
 #group {
@@ -133,11 +141,11 @@ body {
     width: 10px;
 }
 
-.contentDiv{
+.contentDiv {
     width: 100%;
 }
 
-.dataDiv{
+.dataDiv {
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -145,10 +153,47 @@ body {
 
 .time {
     display: flex;
+    font-size: 18px;
     align-items: flex-end;
+    font-weight: bold;
 }
 
-.nick, .time{
-    font-size: 18px;
+
+.nick {
+    font-size: 22px;
     font-weight: bold;
+}
+
+#imageDiv{
+    gap: 10px;
+    display: flex;
+}
+
+#imageDiv > button{
+    text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#uploaded {
+    border-radius: 5px;
+    border: 0.5px dashed;
+    max-width: 200px;
+}
+
+#fileupload{
+    display: none;
+}
+
+label{
+    align-items: center;
+    display: flex;
+    padding: 0 1rem;
+    background-color: #333;
+    color: #FFF;
+    outline: none;
+    margin: 0.25rem;
+    border-radius: 3px;
+    cursor: pointer;
 }

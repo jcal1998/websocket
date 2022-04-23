@@ -12,9 +12,19 @@
     <ul id="members"></ul>
   </header>
   <ul id="messages"></ul>
-  <p id="typing"></p>
+  <div id="bottomDiv">
+    <p id="typing"></p>
+    <div id="imageDiv">
+      <p id="selectedImage"></p>
+      <button id="xdelete" type="button" onclick="cancelUpload()"></button>
+    </div>
+    
+  </div>
   <form id="form" action="">
     <input id="input" autocomplete="off" />
+    <label for="fileupload">📎</label>
+    <input id="fileupload" type="file" name="fileupload" accept="image/png, image/jpeg, image/jpg, video/mp4"
+      onchange="onChange()" />
     <select id="select" name="select"></select>
     <button>Send</button>
   </form>

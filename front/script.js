@@ -7,9 +7,10 @@ let members = document.getElementById('members')
 let messages = document.getElementById('messages');
 let form = document.getElementById('form');
 let input = document.getElementById('input');
-let online = document.getElementById('select')
+let online = document.getElementById('select');
 
-const createMessage = (msg, sender, private) => {
+const createMessage = async (msg, sender, private) => {
+    console.log(msg)
     let contentDiv = document.createElement('div')
     let dataDiv = document.createElement('div')
     let item = document.createElement('li');
@@ -28,7 +29,24 @@ const createMessage = (msg, sender, private) => {
     time.className = 'time'
     message.textContent = msg.data;
     message.className = 'message'
-
+    if (msg.upload) {
+        if (msg.upload.type === 'video/mp4') {
+            const video = document.createElement('video')
+            video.width = 200
+            video.controls = true
+            let videoSource = document.createElement('source')
+            videoSource.setAttribute('src', msg.url)
+            videoSource.setAttribute('type', "video/mp4")
+            video.appendChild(videoSource)
+            contentDiv.appendChild(video)
+        } else {
+            let imagem = document.createElement('img')
+            imagem.setAttribute('id', 'uploaded')
+            imagem.setAttribute('src', msg.url)
+            imagem.setAttribute('alt', '')
+            contentDiv.appendChild(imagem)
+        }
+    }
     dataDiv.appendChild(message)
     dataDiv.appendChild(time)
     contentDiv.appendChild(dataDiv)
@@ -45,22 +63,38 @@ const createMessage = (msg, sender, private) => {
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (input.value.trim()) {
+    fileInput = document.getElementById('fileupload').files[0];
+    if (input.value.trim() || fileInput) {
         const msg = {
             nick: nick,
             data: input.value,
-            time: `${new Date().getHours()}:${new Date().getMinutes()}`,
-            destiny: select.value
+            time: `${new Date().toLocaleTimeString('pt-BR', { hour: 'numeric', minute: 'numeric' })}`,
+            destiny: select.value,
+            ...fileInput && { upload: fileInput, url: URL.createObjectURL(fileInput) }
         }
         socket.emit('chat', msg);
         input.value = '';
+
 
         const private = msg.destiny === 'Todos' ? false : true;
         createMessage(msg, `my__message`, private)
 
         socket.emit('typing', { nick, typing: false });
     }
+    cancelUpload()
 });
+
+const onChange = () => {
+    let fileName = document.getElementById('fileupload').files[0].name
+    document.getElementById('selectedImage').innerHTML = fileName ? `Arquivo selecionado: ${fileName}` : ''
+    document.getElementById('xdelete').innerHTML = fileName ? `❌` : ''
+}
+
+const cancelUpload = () => {
+    document.getElementById('fileupload').value = null
+    document.getElementById('selectedImage').innerHTML = ''
+    document.getElementById('xdelete').innerHTML = ''
+}
 
 let tempo = setTimeout(() => {
     const msg = {
@@ -90,6 +124,7 @@ form.addEventListener('input', function (e) {
 
 socket.on('chat', (msg) => {
     if (nick !== msg.nick) {
+        console.log(msg)
         createMessage(msg, `others__message`, false);
     }
 });
@@ -99,8 +134,6 @@ socket.on('private', (msg) => {
         createMessage(msg, `others__message`, true);
     }
 })
-
-
 
 socket.on('members', (msg) => {
     if (!document.getElementById(`${nick}`)) {
@@ -159,6 +192,7 @@ socket.on('members', (msg) => {
 })
 
 socket.on('typing', (msg) => {
-    const nickname = msg.nick === nick ? 'Você' : `${msg.nick}`
-    document.getElementById('typing').innerHTML = msg.typing ? `${nickname} está digitando ...` : '';
+    if (msg.nick !== nick) {
+        document.getElementById('typing').innerHTML = msg.typing ? `${msg.nick} está digitando ...` : '';
+    }
 });
