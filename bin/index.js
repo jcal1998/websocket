@@ -4,6 +4,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server, Socket } = require("socket.io");
+const { randomUUID } = require('crypto');
 const io = new Server(server);
 
 const members = []
@@ -30,20 +31,27 @@ io.on('connection', (socket) => {
     const member = {
       nick: socket.handshake.query.loggeduser,
       online: true,
+      idChat: socket.handshake.query.idChat,
     }
     members.push(member);
+    console.log('aqui os members', members)
+    io.emit('private', members);
   } else {
-    members.forEach(member => {
-      if (member.nick === socket.handshake.query.loggeduser) {
-        member.online = true
-      }
-    })
+    members.forEach(member => { if (member.nick === socket.handshake.query.loggeduser) member.online = true; })
   }
 
   io.emit('members', members)
 
   socket.on('chat', (msg) => {
-    io.emit('chat', msg);
+    if (msg.destiny === 'Todos') {
+      delete msg.destiny;
+      io.emit('chat', msg);
+    } else {
+      const channel = members.filter(member => member.nick === msg.destiny)[0].idChat
+      console.log(channel)
+      delete msg.destiny;
+      io.emit(channel, msg)
+    }
   });
 
   socket.on('typing', (msg) => {

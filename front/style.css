@@ -66,6 +66,7 @@ body {
     max-width: 400px;
     padding: 0.5rem 1rem;
     border-radius: 10px;
+    font-family: Apple Chancery, cursive;
 }
 
 .my__message {
@@ -79,6 +80,10 @@ body {
 .others__message {
     margin: 5px auto 5px 5px;
     background-color: #e6f7ff;
+}
+
+.private{
+    background-color: orange;
 }
 
 #typing {
