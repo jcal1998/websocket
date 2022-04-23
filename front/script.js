@@ -9,8 +9,7 @@ let form = document.getElementById('form');
 let input = document.getElementById('input');
 let online = document.getElementById('select');
 
-const createMessage = async (msg, sender, private) => {
-    console.log(msg)
+const createMessage = (msg, sender, private) => {
     let contentDiv = document.createElement('div')
     let dataDiv = document.createElement('div')
     let item = document.createElement('li');
@@ -30,7 +29,7 @@ const createMessage = async (msg, sender, private) => {
     message.textContent = msg.data;
     message.className = 'message'
     if (msg.upload) {
-        if (msg.upload.type === 'video/mp4') {
+        if (msg.upload === 'video/mp4') {
             const video = document.createElement('video')
             video.width = 200
             video.controls = true
@@ -70,7 +69,7 @@ form.addEventListener('submit', function (e) {
             data: input.value,
             time: `${new Date().toLocaleTimeString('pt-BR', { hour: 'numeric', minute: 'numeric' })}`,
             destiny: select.value,
-            ...fileInput && { upload: fileInput, url: URL.createObjectURL(fileInput) }
+            ...fileInput && { upload: fileInput.type, url: URL.createObjectURL(fileInput) }
         }
         socket.emit('chat', msg);
         input.value = '';
@@ -102,7 +101,7 @@ let tempo = setTimeout(() => {
         status: 'yellow'
     }
     socket.emit('away', msg);
-}, 30000)
+}, 60000)
 
 
 form.addEventListener('input', function (e) {
@@ -119,14 +118,11 @@ form.addEventListener('input', function (e) {
             status: 'yellow'
         }
         socket.emit('away', msg);
-    }, 30000)
+    }, 60000)
 });
 
 socket.on('chat', (msg) => {
-    if (nick !== msg.nick) {
-        console.log(msg)
-        createMessage(msg, `others__message`, false);
-    }
+    if (msg.nick !== nick) createMessage(msg, `others__message`, false);
 });
 
 socket.on('private', (msg) => {
